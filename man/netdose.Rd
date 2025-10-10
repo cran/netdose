@@ -33,8 +33,7 @@ netdose(
   details.chkmultiarm = FALSE,
   func.inverse = invmat,
   keepdata = gs("keepdata"),
-  warn = TRUE,
-  ...
+  warn = TRUE
 )
 }
 \arguments{
@@ -49,7 +48,8 @@ or log hazard ratio). Or an R object created with
 
 \item{dose1}{Doses for the first treatment in each comparison.}
 
-\item{agent2}{Agents corresponding to the second treatment in each comparison.}
+\item{agent2}{Agents corresponding to the second treatment in each
+comparison.}
 
 \item{dose2}{Doses for the second treatment in each comparison.}
 
@@ -60,23 +60,27 @@ or log hazard ratio). Or an R object created with
 \item{subset}{An optional vector specifying a subset of studies to
 be used. The default is `NULL`.}
 
-\item{n1}{Numeric. Optional. Sample sizes for the first treatment in each comparison.}
+\item{n1}{Numeric. Optional. Sample sizes for the first treatment in
+each comparison.}
 
-\item{n2}{Numeric. Optional. Sample sizes for the second treatment in each comparison.}
+\item{n2}{Numeric. Optional. Sample sizes for the second treatment in
+each comparison.}
 
-\item{event1}{Numeric. Optional. Number of events for the first treatment in each comparison.}
+\item{event1}{Numeric. Optional. Number of events for the first treatment
+in each comparison.}
 
-\item{event2}{Numeric. Optional. Number of events for the second treatment in each comparison.}
+\item{event2}{Numeric. Optional. Number of events for the second treatment
+in each comparison.}
 
 \item{sm}{A character string indicating underlying summary measure,
 e.g., \code{"RD"}, \code{"RR"}, \code{"OR"}, \code{"ASD"},
 \code{"HR"}, \code{"MD"}, \code{"SMD"}, or \code{"ROM"}.}
 
-\item{common}{A logical indicating whether a common effects dose-response network
-meta-analysis should be conducted. The default is `TRUE`.}
+\item{common}{A logical indicating whether a common effects dose-response
+network meta-analysis should be conducted. The default is \code{TRUE}.}
 
-\item{random}{A logical indicating whether a random effects dose-response network
-meta-analysis should be conducted. The default is `TRUE`.}
+\item{random}{A logical indicating whether a random effects dose-response
+network meta-analysis should be conducted. The default is \code{TRUE}.}
 
 \item{tau.preset}{An optional value for the square-root of the
 between-study variance \eqn{\tau^2}.}
@@ -106,17 +110,16 @@ example.}
 
 \item{tol.multiarm}{A numeric for the tolerance for consistency of
 treatment estimates in multi-arm studies which are consistent by
-design.}
+design (only considered for standard network meta-analysis model).}
 
 \item{tol.multiarm.se}{A numeric for the tolerance for consistency
 of standard errors in multi-arm studies which are consistent by
-design. This check is not conducted if the argument is
-\code{NULL}.}
+design (only considered for standard network meta-analysis model).}
 
 \item{details.chkmultiarm}{A logical indicating whether treatment
 estimates and / or variances of multi-arm studies with
 inconsistent results or negative multi-arm variances should be
-printed.}
+printed (only considered for standard network meta-analysis model).}
 
 \item{func.inverse}{R function used to calculate the pseudoinverse
 of the Laplacian matrix L.}
@@ -127,15 +130,15 @@ should be kept in netdose object.}
 \item{warn}{A logical indicating whether warnings should be printed
 (e.g., if studies are excluded from network meta-analysis due to zero
 standard errors).}
-
-\item{...}{Additional arguments (to catch deprecated arguments).}
 }
 \value{
 An object of class \code{netdose}; a list containing the
 following components:
 \item{studlab}{Study labels.}
-\item{agent1}{Label/Agents corresponding to the first treatment in each comparison..}
-\item{agent2}{Label/Agents corresponding to the second treatment in each comparison..}
+\item{agent1}{Label/Agents corresponding to the first treatment in each
+  comparison.}
+\item{agent2}{Label/Agents corresponding to the second treatment in each
+  comparison.}
 \item{dose1}{Doses for the first treatment in each comparison.}
 \item{dose2}{Doses for the second treatment in each comparison.}
 \item{treat1}{Label/First treatment in each comparison.}
@@ -158,7 +161,7 @@ alphabetic order.}
 
 \item{common.dose}{Common dose value used in the analysis, if specified.}
 
-#' **Common/Random effects model results:**
+**Common/Random effects model results:**
  \item{TE.common, TE.random}{Matrix with overall
   treatment effects estimated by the dose-response (common and random
   effects) model.}
@@ -178,76 +181,81 @@ alphabetic order.}
 \item{seTE.drnma.common, seTE.drnma.random}{A vector with corresponding
   standard errors (common and random effects model).}
 \item{lower.drnma.common, lower.drnma.random}{A vector with lower
-  confidence limits for dose-response treatment estimates (common and random effects
-  model).}
+  confidence limits for dose-response treatment estimates (common and
+  random effects model).}
 \item{upper.drnma.common, upper.drnma.random}{A vector with upper
- confidence limits for dose-response treatment estimates (common and random effects
-  model).}
+ confidence limits for dose-response treatment estimates (common and
+ random effects model).}
 \item{statistic.drnma.common, statistic.drnma.random}{A vector with
- z-values for the overall dose-response effects (common and random
+  z-values for the overall dose-response effects (common and random
   effects model).}
 \item{pval.drnma.common, pval.drnma.random}{A vector with p-values for
   the overall dose-response effects (common and random effects
   model).}
 
 **Heterogeneity and goodness-of-fit statistics:**
-\item{Q.dose}{Overall heterogeneity / inconsistency statistic for
-dose-response network meta-analysis.}
-\item{df.Q.dose}{Degrees of freedom for test of heterogeneity /
+\item{Q}{Overall heterogeneity / inconsistency statistic for
+  dose-response network meta-analysis.}
+\item{df.Q}{Degrees of freedom for test of heterogeneity /
   inconsistency for dose-response network meta-analysis.}
-\item{pval.Q.dose}{P-value for test of heterogeneity /
+\item{pval.Q}{P-value for test of heterogeneity /
   inconsistency for dose-response network meta-analysis.}
 \item{tau}{Square-root of between-study variance with DerSimonian
-and Laird method for dose-response network meta-analysis.}
+  and Laird method for dose-response network meta-analysis.}
 \item{tauml}{Square-root of between-study variance with Maximum
- likelihood method for dose-response network meta-analysis.}
+  likelihood method for dose-response network meta-analysis.}
 \item{I2, lower.I2, upper.I2}{I-squared, lower and upper confidence
   limits.}
-\item{Q.standard}{Overall heterogeneity / inconsistency statistic
-  (standard model).}
-\item{df.Q.standard}{Degrees of freedom for test of heterogeneity /
-  inconsistency (standard model).}
-\item{pval.Q.standard}{P-value for test of heterogeneity /
-  inconsistency (standard model).}
-\item{Q.diff}{Test statistic for difference in goodness of fit
-  between standard and dose-response model.}
-\item{df.Q.diff}{Degrees of freedom for difference in goodness of
-  fit between standard and dose-response model.}
-\item{pval.Q.diff}{P-value for difference in goodness of fit
-  between standard and additive model.}
+\item{Q.lump}{Overall heterogeneity / inconsistency statistic
+  (NMA, lumping approach).}
+\item{df.Q.lump}{Degrees of freedom for test of heterogeneity /
+  inconsistency (NMA, lumping approach).}
+\item{pval.Q.lump}{P-value for test of heterogeneity /
+  inconsistency (NMA, lumping approach).}
+\item{Q.split}{Overall heterogeneity / inconsistency statistic
+  (NMA, splitting approach).}
+\item{df.Q.split}{Degrees of freedom for test of heterogeneity /
+  inconsistency (NMA, splitting approach).}
+\item{pval.Q.split}{P-value for test of heterogeneity /
+  inconsistency (NMA, splitting approach).}
 
-\item{Xd}{Design matrix for dose-response network meta-analysis.}
+\item{B.matrix}{Edge-vertex incidence matrix.}
+\item{D_obs.matrix}{Matrix with observed doses.}
+\item{D.matrix}{Matrix with transformed doses.}
+\item{X.matrix}{Design matrix for dose-response network meta-analysis.}
 
 \item{sm}{Summary measure used in the analysis.}
 \item{level}{Level used to calculate confidence intervals for
- individual comparisons.}
-\item{common}{A logical indicating whether a common effects dose-response network
- meta-analysis should be conducted.}
-\item{random}{A logical indicating whether a random effects dose-response network
-meta-analysis should be conducted.}
+  individual comparisons.}
+\item{common}{A logical indicating whether a common effects dose-response
+  network meta-analysis should be conducted.}
+\item{random}{A logical indicating whether a random effects dose-response
+  network meta-analysis should be conducted.}
 \item{method}{Method used for the dose-response relationship.}
 
 \item{reference.group}{Reference agent.}
-\item{Q.to.df.ratio}{Q to df ratio, i.e, Q.dose/df.Q.dose.}
+\item{Q.to.df.ratio}{Q to df ratio, i.e, Q/df.Q.}
 \item{func.inverse}{Function used to calculate the pseudoinverse of
-the Laplacian matrix L.}
+  the Laplacian matrix L.}
 \item{backtransf}{A logical indicating whether results should be
-back transformed in printouts and forest plots.}
+  back transformed in printouts and forest plots.}
 
 \item{data}{Data frame containing the study information.}
 }
 \description{
-The `netdose` function performs a dose-response network meta-analysis in a frequentist way.
-It accepts a dataset with study-level data, constructs a design matrix for the dose-response model,
-and computes treatment effects under common and/or random effects models.
-The function supports multiple dose-response relationship modeling approaches, including linear,
-exponential, quadratic, restricted cubic splines (rcs), and fractional polynomial methods (fp1).
+The `netdose` function performs a dose-response network meta-analysis in a
+frequentist way. It accepts a dataset with study-level data, constructs a
+design matrix for the dose-response model, and computes treatment effects
+under the common and random effects models. The function supports multiple
+dose-response relationship modelling approaches, including linear,
+exponential, quadratic, restricted cubic splines (rcs), and fractional
+polynomials (fp1, fp2).
 }
 \details{
 The dose-response network meta-analysis (DR-NMA) has been implemented
 by modelling different dose-response functions, as described by
 Mandema et al. 2005 and Mawdsley et al. 2016 and by using restricted cubic
-splines (Hamza et al. 2020) in Bayesian framework.
+splines (Hamza et al. 2024) in a Bayesian setting.
 
 The function \code{netdose} conducts a dose-response network meta-analysis
 with a variety of dose-response functions (such as the linear, exponential,
@@ -258,7 +266,8 @@ The following dose-response functions are available:
 \itemize{
 \item Linear dose-response relationship (\code{method = "linear"})
 \item Exponential dose-response relationship (\code{method = "exponential"})
-\item Quadratic polynomial dose-response relationship (\code{method = "quadratic"})
+\item Quadratic polynomial dose-response relationship
+  (\code{method = "quadratic"})
 \item Restricted cubic splines (\code{method = "rcs"})
 \item Fractional polynomial (order 1) (\code{method = "fp1"})
 \item Fractional polynomial (order 2) (\code{method = "fp2"})
@@ -276,22 +285,19 @@ is ignored for a linear, exponential or quadratic polynomial dose-response
 relationship.
 }
 \examples{
-# Load anesthesia data
-data(anesthesia)
-
-# Use a subset of 5 studies
-anesthesia_subset <- subset(anesthesia, study \%in\% unique(anesthesia$study)[1:5])
+# Use a subset of 3 studies from anesthesia data
+anesthesia_subset <-
+  subset(anesthesia, study \%in\% unique(anesthesia$study)[1:3])
 
 # Prepare data for DR-NMA
-dat <- meta::pairwise(
+dat <- pairwise(
   agent = list(agent1, agent2, agent3),
   event = list(event1, event2, event3),
   n = list(n1, n2, n3),
   dose = list(dose1, dose2, dose3),
   data = anesthesia_subset,
   studlab = study,
-  append = FALSE,
-  sm = "RR"
+  append = FALSE
 )
 
 # Perform DR-NMA with a linear dose-response function
@@ -303,19 +309,18 @@ dr1 <- netdose(
 
 \donttest{
 # DR-NMA with FP1 dose-response function with p = -0.5
-FP1 <- netdose(TE, seTE, agent1, dose1, agent2,
+dr_fp1 <- netdose(TE, seTE, agent1, dose1, agent2,
   dose2, studlab,
   data = dat,
   method = "fp1"
 )
 
 # DR-NMA with FP1 dose-response function with p = 0.5
-FP1_p0.5 <- netdose(TE, seTE, agent1, dose1, agent2,
+dr_fp1_p0.5 <- netdose(TE, seTE, agent1, dose1, agent2,
   dose2, studlab,
   data = dat,
   method = "fp1", param = 0.5
 )
-
 
 # DR-NMA with RCS dose-response function with knots at 10th, 50th and 90th percentiles
 dr_rcs <- netdose(TE, seTE, agent1, dose1, agent2,
@@ -335,24 +340,28 @@ dr_rcs2 <- netdose(TE, seTE, agent1, dose1, agent2,
 }
 \references{
 Mandema JW, Cox EJ (2005):
-Therapeutic benefit of eletriptan compared to sumatriptan for the acute relief
-of migraine pain--results of a model-based meta-analysis that accounts for encapsulation.
+Therapeutic benefit of eletriptan compared to sumatriptan for the acute
+relief of migraine pain--results of a model-based meta-analysis that accounts
+for encapsulation.
 \emph{Cephalalgia},
-\bold{25}, 715-725
+\bold{25}, 715--25
 
 Mawdsley D, Bennetts M, Dias S, Boucher M, Welton N (2016):
-Model-Based Network Meta-Analysis: A Framework for Evidence Synthesis of Clinical Trial Data.
+Model-Based Network Meta-Analysis: A Framework for Evidence Synthesis of
+Clinical Trial Data.
 \emph{PT Pharmacometrics & Systems Pharmacology},
-\bold{5}, 393-401
+\bold{5}, 393--401
 
-Hamza T, Furukawa TA, Orsin N, Cipriani A, Iglesias C, Salanti G (2022):
-A dose-effect network meta-analysis model: an application in antidepressants.
-\emph{Statistical Methods in Medical Research}
+Hamza T, Furukawa TA, Orsin N, Cipriani A, Iglesias CP, Salanti G (2024):
+A dose-effect network meta-analysis model with application in antidepressants
+using restricted cubic splines.
+\emph{Statistical Methods in Medical Research},
+\bold{33}, 1461--72
 
 Petropoulou et al. (2025):
 Network meta-analysis with dose-response relationships.
 }
 \author{
-Maria Petropoulou <maria.petropoulou@uniklinik-freiburg.de>,
+Maria Petropoulou <m.petropoulou.a@gmail.com>,
   Guido Schwarzer <guido.schwarzer@uniklinik-freiburg.de>
 }
