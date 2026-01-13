@@ -20,8 +20,8 @@ netdose(
   event2 = NULL,
   sm,
   common = gs("common"),
-  random = gs("random") | !is.null(tau.preset),
-  tau.preset = NULL,
+  random = gs("random") | !is.null(tau),
+  tau = NULL,
   method = "linear",
   param = NULL,
   reference.group,
@@ -31,6 +31,7 @@ netdose(
   tol.multiarm = 0.001,
   tol.multiarm.se = NULL,
   details.chkmultiarm = FALSE,
+  correlated = FALSE,
   func.inverse = invmat,
   keepdata = gs("keepdata"),
   warn = TRUE
@@ -82,7 +83,7 @@ network meta-analysis should be conducted. The default is \code{TRUE}.}
 \item{random}{A logical indicating whether a random effects dose-response
 network meta-analysis should be conducted. The default is \code{TRUE}.}
 
-\item{tau.preset}{An optional value for the square-root of the
+\item{tau}{An optional value for the square-root of the
 between-study variance \eqn{\tau^2}.}
 
 \item{method}{An optional character string specifying the method to
@@ -120,6 +121,9 @@ design (only considered for standard network meta-analysis model).}
 estimates and / or variances of multi-arm studies with
 inconsistent results or negative multi-arm variances should be
 printed (only considered for standard network meta-analysis model).}
+
+\item{correlated}{A logical indicating if the arms of a multi arm study
+is correlated.}
 
 \item{func.inverse}{R function used to calculate the pseudoinverse
 of the Laplacian matrix L.}
@@ -235,11 +239,11 @@ alphabetic order.}
 
 \item{reference.group}{Reference agent.}
 \item{Q.to.df.ratio}{Q to df ratio, i.e, Q/df.Q.}
+\item{correlated}{Correlated treatment arms in multi-arm studies.}
 \item{func.inverse}{Function used to calculate the pseudoinverse of
   the Laplacian matrix L.}
 \item{backtransf}{A logical indicating whether results should be
   back transformed in printouts and forest plots.}
-
 \item{data}{Data frame containing the study information.}
 }
 \description{

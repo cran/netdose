@@ -1,7 +1,7 @@
 Package: netdose
 Title: Dose-Response Network Meta-Analysis in a Frequentist Way
-Version: 0.7-2
-Date: 2025-10-10
+Version: 0.7-3
+Date: 2026-01-13
 Depends: R (>= 4.4.0), netmeta (>= 3.1.1)
 Imports: MASS, Hmisc, meta, Matrix, ggplot2, ggh4x, dplyr, tidyr
 Authors@R: c(person("Maria", "Petropoulou",
@@ -22,6 +22,6 @@ LazyData: true
 Author: Maria Petropoulou [aut, cre] (ORCID:
     <https://orcid.org/0000-0002-7147-3644>),
   Guido Schwarzer [aut] (ORCID: <https://orcid.org/0000-0001-6214-9087>)
-Packaged: 2025-10-10 11:14:56 UTC; petropou_admin
+Packaged: 2026-01-13 12:29:37 UTC; petropou_admin
 Repository: CRAN
-Date/Publication: 2025-10-10 12:20:02 UTC
+Date/Publication: 2026-01-13 12:50:02 UTC

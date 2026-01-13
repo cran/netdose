@@ -38,7 +38,7 @@
 #'   network meta-analysis should be conducted. The default is \code{TRUE}.
 #' @param random A logical indicating whether a random effects dose-response
 #'   network meta-analysis should be conducted. The default is \code{TRUE}.
-#' @param tau.preset An optional value for the square-root of the
+#' @param tau An optional value for the square-root of the
 #'   between-study variance \eqn{\tau^2}.
 #' @param method An optional character string specifying the method to
 #'  be used for the dose-response relationship. Either, "linear", "exponential",
@@ -67,13 +67,15 @@
 #'   estimates and / or variances of multi-arm studies with
 #'   inconsistent results or negative multi-arm variances should be
 #'   printed (only considered for standard network meta-analysis model).
-#' @param keepdata A logical indicating whether original data(set)
-#'   should be kept in netdose object.
-#' @param warn A logical indicating whether warnings should be printed
-#'   (e.g., if studies are excluded from network meta-analysis due to zero
-#'   standard errors).
+#' @param correlated A logical indicating if the arms of a multi arm study
+#'  is correlated.
 #' @param func.inverse R function used to calculate the pseudoinverse
-#'   of the Laplacian matrix L.
+#'  of the Laplacian matrix L.
+#' @param keepdata A logical indicating whether original data(set)
+#' should be kept in netdose object.
+#' @param warn A logical indicating whether warnings should be printed
+#' (e.g., if studies are excluded from network meta-analysis due to zero
+#' standard errors).
 #'
 #' @details
 #' The dose-response network meta-analysis (DR-NMA) has been implemented
@@ -212,11 +214,11 @@
 #'
 #' \item{reference.group}{Reference agent.}
 #' \item{Q.to.df.ratio}{Q to df ratio, i.e, Q/df.Q.}
+#' \item{correlated}{Correlated treatment arms in multi-arm studies.}
 #' \item{func.inverse}{Function used to calculate the pseudoinverse of
 #'   the Laplacian matrix L.}
 #' \item{backtransf}{A logical indicating whether results should be
 #'   back transformed in printouts and forest plots.}
-#'
 #' \item{data}{Data frame containing the study information.}
 #'
 #' @author Maria Petropoulou <m.petropoulou.a@gmail.com>,
@@ -308,8 +310,8 @@ netdose <- function(TE, seTE, agent1, dose1, agent2, dose2, studlab,
                     #
                     sm,
                     common = gs("common"),
-                    random = gs("random") | !is.null(tau.preset),
-                    tau.preset = NULL,
+                    random = gs("random") | !is.null(tau),
+                    tau = NULL,
                     #
                     method = "linear",
                     param = NULL,
@@ -325,6 +327,7 @@ netdose <- function(TE, seTE, agent1, dose1, agent2, dose2, studlab,
                     tol.multiarm.se = NULL,
                     details.chkmultiarm = FALSE,
                     #
+                    correlated = FALSE,
                     func.inverse = invmat,
                     #
                     keepdata = gs("keepdata"),
@@ -338,8 +341,8 @@ netdose <- function(TE, seTE, agent1, dose1, agent2, dose2, studlab,
   chklogical(common)
   chklogical(random)
   #
-  if (!is.null(tau.preset)) {
-    chknumeric(tau.preset, min = 0, length = 1)
+  if (!is.null(tau)) {
+    chknumeric(tau, min = 0, length = 1)
   }
   #
   method <-
@@ -363,6 +366,8 @@ netdose <- function(TE, seTE, agent1, dose1, agent2, dose2, studlab,
     chknumeric(tol.multiarm.se, min = 0, length = 1)
   }
   chklogical(details.chkmultiarm)
+  #
+  chklogical(correlated)
   #
   chklogical(keepdata)
   chklogical(warn)
@@ -905,9 +910,12 @@ netdose <- function(TE, seTE, agent1, dose1, agent2, dose2, studlab,
     M <- createXd1(agent1, dose1, agent2, dose2, studlab, g = dose2dose)
   }
   else if (method == "exponential") {
-    param <- NULL
+    if (is.null(param)) {
+      param <- 1
+    }
     #
-    M <- createXd1(agent1, dose1, agent2, dose2, studlab, g = dose2exp)
+    M <- createXd1(agent1, dose1, agent2, dose2, studlab,
+                   g = dose2exp, param = param)
   }
   else if (method == "fp1") { # fractional polynomial (order 1)
     if (is.null(param)) {
@@ -919,7 +927,9 @@ netdose <- function(TE, seTE, agent1, dose1, agent2, dose2, studlab,
     )
   }
   else if (method == "quadratic") { # quadratic polynomial
-    param <- NULL
+    if (is.null(param)) {
+       param <- c(1, 2)
+    }
     #
     M <- createXd2(agent1, dose1, agent2, dose2, studlab,
                    g1 = dose2dose, g2 = dose2poly, param = param
@@ -955,9 +965,11 @@ netdose <- function(TE, seTE, agent1, dose1, agent2, dose2, studlab,
   #
   #
   
-  p0 <- prepare(TE, seTE, treat1, treat2, studlab, func.inverse = func.inverse)
-  ps <- prepare(TE, seTE, agent1, agent2, studlab, func.inverse = func.inverse)
+  p0 <- prepare(TE, seTE, treat1, treat2, studlab, correlated = correlated, func.inverse = func.inverse)
+  ps <- prepare(TE, seTE, agent1, agent2, studlab, correlated = correlated, func.inverse = func.inverse)
   #
+  p0 <- p0$data
+  ps <- ps$data
   o <- order(p0$order)
   os <- order(ps$order)
   
@@ -970,12 +982,16 @@ netdose <- function(TE, seTE, agent1, dose1, agent2, dose2, studlab,
   #
   Q.split <- df.Q.split <- pval.Q.split <- NA
   #
+  data.tmp <- if (!is.null(data)) data else
+    data.frame(agent1 = agent1, agent2 = agent2, studlab = studlab,
+               stringsAsFactors = FALSE)
+  #
   if (!any(same_agents)) {
     #
     # Lumping approach
     #
     if (netconnection(agent1, agent2, ps$studlab[os])$n.subnets == 1) {
-      net1 <- netmeta(ps$TE[os], ps$seTE[os], agent1, agent2, ps$studlab[os],
+      net1 <- netmeta(TE, seTE, treat1 = agent1, treat2 = agent2, studlab, data = data.tmp,
                       reference.group = reference.group,
                       tol.multiarm = tol.multiarm,
                       tol.multiarm.se = tol.multiarm.se,
@@ -986,11 +1002,12 @@ netdose <- function(TE, seTE, agent1, dose1, agent2, dose2, studlab,
       df.Q.lump <- net1$df.Q
       pval.Q.lump <- net1$pval.Q
     }
+    }
     #
     # Splitting approach
     #
     if (netconnection(treat1, treat2, ps$studlab[os])$n.subnets == 1) {
-      net2 <- netmeta(ps$TE[os], ps$seTE[os], treat1, treat2, ps$studlab[os],
+      net2 <- netmeta(TE, seTE, treat1, treat2, studlab, data = data.tmp,
                       reference.group = reference.group,
                       tol.multiarm = tol.multiarm,
                       tol.multiarm.se = tol.multiarm.se,
@@ -1000,10 +1017,7 @@ netdose <- function(TE, seTE, agent1, dose1, agent2, dose2, studlab,
       Q.split <- net2$Q
       df.Q.split <- net2$df.Q
       pval.Q.split <- net2$pval.Q
-    }
-  }
-  
-  
+   }
   #
   # Common effects DR-NMA model
   #
@@ -1018,9 +1032,9 @@ netdose <- function(TE, seTE, agent1, dose1, agent2, dose2, studlab,
   #
   tau <- res.c$tau
   #
-  p1 <- prepare(TE, seTE, treat1, treat2, studlab,
-                if (is.na(tau)) 0 else tau, invmat)
+  p1 <- prepare(TE, seTE, treat1, treat2, studlab, tau = tau, correlated = correlated, func.inverse = func.inverse)
   #
+  p1 <- p1$data
   res.r <- nma_dose(p1$TE[o], p1$seTE[o], p1$weights[o], p1$studlab[o],
                     agent1, agent2, p1$treat1[o], p1$treat2[o],
                     p1$narms[o],
@@ -1047,6 +1061,7 @@ netdose <- function(TE, seTE, agent1, dose1, agent2, dose2, studlab,
     seTE = p0$seTE[o],
     seTE.adj.common = sqrt(1 / p0$weights[o]),
     seTE.adj.random = sqrt(1 / p1$weights[o]),
+    seTEadj = res.c$seTE[o],
     #
     k = res.c$k,
     m = res.c$m,
@@ -1129,6 +1144,7 @@ netdose <- function(TE, seTE, agent1, dose1, agent2, dose2, studlab,
     func.inverse = deparse(substitute(func.inverse)),
     #
     backtransf = backtransf,
+    correlated = correlated,
     #
     data = if (keepdata) data else NULL
   )
