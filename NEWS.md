@@ -1,4 +1,12 @@
-## netdose, version 0.7-2
+## netdose, version 0.7-4 (15-01-2025)
+
+### Major changes
+
+* netdose():
+  - exponential model with a parameter p included
+  - new option with argument correlated: correlated treatment arms in multi-arm studies (trials & triangles variance for parallel studies)
+
+## netdose, version 0.7-2 
 
 ### Major changes
 

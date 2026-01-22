@@ -282,10 +282,10 @@ The parameters for the selected dose-response function can be specified
 using argument \code{param}: a numeric vector specifying the percentiles to
 set the knots for the restricted cubic splines (default: knots at the 10th,
 50th, and 90th percentile), a single numeric specifying the power of the
-fractional polynomial with order 1 (default: -0.5), or a numeric vector of
-length 2 specifying the first and second power of a fractional polynomial
+fractional polynomial with order 1 (default: -0.5), the power of the exponential (default: 1), 
+or a numeric vector of length 2 specifying the first and second power of a fractional polynomial
 with order 2 (default: -0.5 and -0.5). The input for argument \code{param}
-is ignored for a linear, exponential or quadratic polynomial dose-response
+is ignored for a linear or quadratic polynomial dose-response
 relationship.
 }
 \examples{

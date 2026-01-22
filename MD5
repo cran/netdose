@@ -1,7 +1,7 @@
 94d55d512a9ba36caa9b7df079bae19f *COPYING
-03f5aae612901cc2064c4bf3ac76b57f *DESCRIPTION
+1f59eeb17e09d948956ef0378caf4d53 *DESCRIPTION
 6bbe80f28076c6618bdeadfc36c78782 *NAMESPACE
-c0c5ccf218b78e1da74606878a2e4364 *NEWS.md
+6cbceed149cae5aed3a47b4b7665904a *NEWS.md
 b09c3ae3f18d4989fcc21d0b27dade0c *R/anesthesia.R
 a0b06f331fd7d0710547bb4448b40530 *R/antidepressants.R
 df61c2276f4b324f0996e367c9a5ad54 *R/createB.R
@@ -15,7 +15,7 @@ f7eddc79402fbb6c96f673b1e3cbce53 *R/meta-xlab.R
 aebb5c22f28f7cd1dc57482a9c497612 *R/multiarm.R
 598b36eb2061194b9e5acf9b1b1196b8 *R/netdose-internal.R
 c792edaa8461a06c43816d72590f100d *R/netdose-package.R
-92708517b263f517bcabcbedfba9e9ce *R/netdose.R
+1863dd1f6f323fd43a57c2d1050380bb *R/netdose.R
 97b5277a4a4d4e0714cbe1177362c9d6 *R/nma_dose.R
 0633cef7836177557474d37326dba326 *R/plot.netdose.R
 e7df99964c549806e0718c0f73b8c1db *R/predict.netdose.R
@@ -30,7 +30,7 @@ d93fb77f85a43d80938e4b5c76990b86 *R/setref.R
 d723acc91fbac1c6b1eae88b651b1b2e *man/antidepressants.Rd
 77e6c495b030a6945fd030615d5bbdf3 *man/dotplot.Rd
 15e1bb9a5c67f13883b3fe54b0e8c166 *man/netdose-package.Rd
-ec9051578408c80c392809b31be49e4c *man/netdose.Rd
+f3981c5dcd85847e64edf954591301e9 *man/netdose.Rd
 ca0e221da6c9a0045a5621d114fb7978 *man/plot.netdose.Rd
 5fb93c757634a2fa7f0ab766c1939960 *man/predict.netdose.Rd
 cb942ba30d8a5292b0427ecdbdb18531 *man/print.netdose.Rd
